@@ -10,9 +10,11 @@ public class VerletManager : MonoBehaviour
     int[] triangles;
     public List<int> pinnedVerticesIndex = new List<int>();
     public List<VerletLink> verletLink = new List<VerletLink>();
-    public float LinkLength = 0.25f;
-    public int verletHeight = 10;
-    public int verletLength = 10;
+    //public float LinkLength = 0.25f;
+    public float VerletHeight = 1;
+    public int HeightPointCount = 20;
+    public float VerletLength = 1;
+    public int LengthPointCount = 20;
     public int iterationCount = 50;
 
     public GameObject[] ventilateurs;
@@ -31,47 +33,50 @@ public class VerletManager : MonoBehaviour
 
     void InitVerticeAndLink()
     {
-        Vector3 verletStartPoint = this.transform.position;
+        float heightLinkLength = VerletHeight / HeightPointCount;
+        float lengthLinkLength = VerletLength / LengthPointCount;
 
-        vertices = new Vector3[(verletLength) * (verletHeight)];
-        verticesOld = new Vector3[(verletLength) * (verletHeight)];
+        Vector3 verletStartPoint = this.transform.position - new Vector3(VerletLength/2,0,0);
+
+        vertices = new Vector3[(HeightPointCount) * (LengthPointCount)];
+        verticesOld = new Vector3[(HeightPointCount) * (LengthPointCount)];
         int idx = 0;
-        for (int i = 0; i < verletLength; i++)
+        for (int i = 0; i < LengthPointCount; i++)
         {
-            for (int j = 0; j < verletHeight; j++)
+            for (int j = 0; j < HeightPointCount; j++)
             {
                 vertices[idx] = verletStartPoint;
                 verticesOld[idx] = verletStartPoint;
                 idx++;
-                verletStartPoint.y -= LinkLength;
+                verletStartPoint.y -= heightLinkLength;
             }
-            verletStartPoint.x += LinkLength;
+            verletStartPoint.x += lengthLinkLength;
             verletStartPoint.y = this.transform.position.y;
         }
 
         //creation du maillage
 
-        for (int i = 0; i < verletLength; i++)
+        for (int i = 0; i < LengthPointCount; i++)
         {
-            for (int j = 0; j < verletHeight; j++)
+            for (int j = 0; j < HeightPointCount; j++)
             {
                 //linkDown
-                if (j < verletHeight - 1)
+                if (j < HeightPointCount - 1)
                 {
-                    verletLink.Add(new VerletLink(i* verletHeight +j, i * verletHeight + j + 1, LinkLength));
+                    verletLink.Add(new VerletLink(i* HeightPointCount + j, i * HeightPointCount + j + 1, heightLinkLength));
                 }
 
                 //linkRight
 
-                if (i < verletLength - 1)
+                if (i < LengthPointCount - 1)
                 {
-                    verletLink.Add(new VerletLink(i * verletHeight + j, (i + 1) * verletHeight + j, LinkLength));
+                    verletLink.Add(new VerletLink(i * HeightPointCount + j, (i + 1) * HeightPointCount + j, lengthLinkLength));
                 }
             }
         }
 
         pinnedVerticesIndex.Add(0);
-        pinnedVerticesIndex.Add((verletLength - 1) * verletHeight);
+        pinnedVerticesIndex.Add((LengthPointCount - 1) * HeightPointCount);
 
 
         // Create the mesh
@@ -88,22 +93,22 @@ public class VerletManager : MonoBehaviour
 
     void RecomputeTriangle()
     {
-        triangles = new int[(verletLength - 1) * (verletHeight - 1) * 6];
+        triangles = new int[(LengthPointCount - 1) * (HeightPointCount - 1) * 6];
         int vert = 0;
         int tris = 0;
 
-        for (int z = 0; z < verletLength - 1; z++)
+        for (int z = 0; z < LengthPointCount - 1; z++)
         {
-            for (int x = 0; x < verletHeight - 1; x++)
+            for (int x = 0; x < HeightPointCount - 1; x++)
             {
 
                 triangles[tris] = vert;
-                triangles[tris + 1] = vert + verletHeight + 1;
+                triangles[tris + 1] = vert + HeightPointCount + 1;
                 triangles[tris + 2] = vert + 1;
 
                 triangles[tris + 3] = vert;
-                triangles[tris + 4] = vert + verletHeight;
-                triangles[tris + 5] = vert + verletHeight + 1;
+                triangles[tris + 4] = vert + HeightPointCount;
+                triangles[tris + 5] = vert + HeightPointCount + 1;
 
                 vert++;
                 tris += 6;
@@ -233,20 +238,17 @@ public class VerletManager : MonoBehaviour
     {
         if (vertices != null && vertices.Length != 0)
         {
-            for (int i = 0; i < verletLength; i++)
+            for (int index = 0; index < vertices.Length; index++)
             {
-                for (int j = 0; j < this.verletHeight; j++)
-                {
-                    Gizmos.color = Color.red;
-                    Gizmos.DrawSphere(vertices[i * verletHeight + j], 0.1f);
-                }
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(vertices[index], 0.01f);
             }
 
             /*Gizmos.color = Color.blue;
             Vector3 verletStartPoint = this.transform.position;
-            for (int i = 0; i < verletLength; i++)
+            for (int i = 0; i < VerletLength; i++)
             {
-                for (int j = 0; j < verletHeight; j++)
+                for (int j = 0; j < VerletHeight; j++)
                 {
                     Gizmos.DrawSphere(verletStartPoint,0.05f);
                     verletStartPoint.y -= LinkLength;
