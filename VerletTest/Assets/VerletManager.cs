@@ -18,6 +18,7 @@ public class VerletManager : MonoBehaviour
     public GameObject[] ventilateurs;
     public float ventilateurStrenght = 2.0f;
     public float ventilateurDistanceMax = 1.0f;
+    public float WindSinusPeriod = 1.0f;
 
 
     // Use this for initialization
@@ -57,23 +58,18 @@ public class VerletManager : MonoBehaviour
                 //linkDown
                 if (j < verletHeight - 1)
                 {
-                    verletLink.Add(new VerletLink(new Vector2(i, j), new Vector2(i, j + 1)));
+                    verletLink.Add(new VerletLink(i* verletHeight +j, i * verletHeight + j + 1, LinkLength));
                 }
 
                 //linkRight
 
                 if (i < verletLength - 1)
                 {
-                    verletLink.Add(new VerletLink(new Vector2(i, j), new Vector2(i + 1, j)));
+                    verletLink.Add(new VerletLink(i * verletHeight + j, (i + 1) * verletHeight + j, LinkLength));
                 }
             }
         }
 
-        //
-        /*for(int i = 0; i< verletLength;i++)
-        {
-            pinnedVerticesIndex.Add(i * verletHeight);
-        }*/
         pinnedVerticesIndex.Add(0);
         pinnedVerticesIndex.Add((verletLength - 1) * verletHeight);
 
@@ -131,13 +127,15 @@ public class VerletManager : MonoBehaviour
     void Update()
     {
         UpdateMesh();
-       /* if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
+            Vector3 pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            pz.z = 0;
             GameObject newVentilo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            newVentilo.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            newVentilo.transform.position = pz;
             newVentilo.tag = "Ventilateur";
             ventilateurs = GameObject.FindGameObjectsWithTag("Ventilateur");
-        }*/
+        }
     }
 
     private void FixedUpdate()
@@ -152,18 +150,15 @@ public class VerletManager : MonoBehaviour
         Vector3 forceGravity = new Vector3(0f, -1.5f,0f);
 
 
-        for (int i = 0; i < verletLength; i++)
+        for (int index = 0; index < vertices.Length; index++)
         {
-            for (int j = 0; j < verletHeight; j++)
-            {
-                int index = i * verletHeight + j;
                 if (pinnedVerticesIndex.Contains(index))
                 {
                     continue;
                 }
 
                 Vector3 velocity = vertices[index] - verticesOld[index];
-                verticesOld[index] = vertices[i * verletHeight + j];
+                verticesOld[index] = vertices[index];
                 vertices[index] += velocity;
                 vertices[index] += forceGravity * Time.fixedDeltaTime;
 
@@ -175,10 +170,9 @@ public class VerletManager : MonoBehaviour
                     {
                         float factor = (ventilateurDistanceMax - dist) / ventilateurDistanceMax;
                         Vector3 dir = (vertices[index] - ventilateurs[v].transform.position).normalized;
-                        vertices[index] += factor * ventilateurStrenght * dir * Time.fixedDeltaTime * Mathf.Sin(6.0f*3.141592654f * Time.fixedDeltaTime);
+                        vertices[index] += factor * ventilateurStrenght * dir * Time.fixedDeltaTime * Mathf.Sin(6.0f*3.141592654f * Time.fixedDeltaTime * WindSinusPeriod);
                     }
                 }
-            }
         }
 
         //CONSTRAINTS
@@ -193,21 +187,22 @@ public class VerletManager : MonoBehaviour
 
         for (int i = 0; i < links.Count; i++)
         {
-            int firstPointIndex = (int)verletLink[i].pointPosition.x * verletHeight + (int)verletLink[i].pointPosition.y;
-            int secondPointIndex = (int)verletLink[i].point2Position.x * verletHeight + (int)verletLink[i].point2Position.y;
+            int firstPointIndex = verletLink[i].pointIndex;
+            int secondPointIndex = verletLink[i].point2Index;
+            float linkLength = verletLink[i].linkSize;
 
             Vector3 firstSeg = vertices[firstPointIndex];
             Vector3 secondSeg = vertices[secondPointIndex];
 
             float dist = (firstSeg - secondSeg).magnitude;
-            float error = Mathf.Abs(dist - this.LinkLength);
+            float error = Mathf.Abs(dist - linkLength);
             Vector3 changeDir = Vector2.zero;
 
-            if (dist > LinkLength)
+            if (dist > linkLength)
             {
                 changeDir = (firstSeg - secondSeg).normalized;
             }
-            else if (dist < LinkLength)
+            else if (dist < linkLength)
             {
                 changeDir = (secondSeg - firstSeg).normalized;
             }
@@ -236,7 +231,7 @@ public class VerletManager : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        if (vertices.Length != 0)
+        if (vertices != null && vertices.Length != 0)
         {
             for (int i = 0; i < verletLength; i++)
             {
@@ -247,7 +242,7 @@ public class VerletManager : MonoBehaviour
                 }
             }
 
-            Gizmos.color = Color.blue;
+            /*Gizmos.color = Color.blue;
             Vector3 verletStartPoint = this.transform.position;
             for (int i = 0; i < verletLength; i++)
             {
@@ -258,26 +253,28 @@ public class VerletManager : MonoBehaviour
                 }
                 verletStartPoint.x += LinkLength;
                 verletStartPoint.y = this.transform.position.y;
-            }
+            }*/
 
 
             Gizmos.color = Color.white;
             for (int i = 0; i < verletLink.Count; i++)
             {
-                Debug.DrawLine(vertices[(int)verletLink[i].pointPosition.x * verletHeight + (int)verletLink[i].pointPosition.y], vertices[(int)verletLink[i].point2Position.x * verletHeight + (int)verletLink[i].point2Position.y], Color.white);
+                Debug.DrawLine(vertices[verletLink[i].pointIndex], vertices[verletLink[i].point2Index], Color.white);
             }
         }
     }
 
     public struct VerletLink
     {
-        public Vector2 pointPosition;
-        public Vector2 point2Position;
+        public int pointIndex;
+        public int point2Index;
+        public float linkSize;
 
-        public VerletLink(Vector2 pointPosition, Vector2 point2Position)
+        public VerletLink(int pointIndex, int point2Index, float linkSize)
         {
-            this.pointPosition = pointPosition;
-            this.point2Position = point2Position;
+            this.pointIndex = pointIndex;
+            this.point2Index = point2Index;
+            this.linkSize = linkSize;
         }
     }
 
