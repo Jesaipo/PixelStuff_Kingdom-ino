@@ -8,6 +8,7 @@ public class VerletManager : MonoBehaviour
     Vector3[] vertices;
     Vector3[] verticesOld;
     int[] triangles;
+    Vector2[] uvs;
     public List<int> pinnedVerticesIndex = new List<int>();
     public List<VerletLink> verletLink = new List<VerletLink>();
     //public float LinkLength = 0.25f;
@@ -17,10 +18,41 @@ public class VerletManager : MonoBehaviour
     public int LengthPointCount = 20;
     public int iterationCount = 50;
 
+    public enum InteractionMode
+    {
+        Wind,
+        Pin,
+        Needle,
+        None
+    };
+
+    public InteractionMode currentInteractionMode = InteractionMode.None;
+
+    public void PinIteractionMode()
+    {
+        currentInteractionMode = InteractionMode.Pin;
+    }
+    public void WindIteractionMode()
+    {
+        currentInteractionMode = InteractionMode.Wind;
+    }
+
     public GameObject[] ventilateurs;
     public float ventilateurStrenght = 2.0f;
     public float ventilateurDistanceMax = 1.0f;
     public float WindSinusPeriod = 1.0f;
+
+    public void NeedleIteractionMode()
+    {
+        currentInteractionMode = InteractionMode.Needle;
+    }
+
+    public int StartNeedleIndex = -1;
+    public float stringLength = 0.0f;
+    public Vector3 linkCreatedPosition = Vector3.zero;
+
+
+
 
 
     // Use this for initialization
@@ -89,6 +121,14 @@ public class VerletManager : MonoBehaviour
         filter.mesh = msh;
 
         RecomputeTriangle();
+
+        msh.Clear();
+
+        msh.vertices = vertices;
+        msh.triangles = triangles;
+        msh.uv = uvs;
+
+        msh.RecalculateNormals();
     }
 
     void RecomputeTriangle()
@@ -116,32 +156,176 @@ public class VerletManager : MonoBehaviour
             }
             vert++;
         }
+
+        int uvIndex = 0;
+        uvs = new Vector2[(HeightPointCount) * (LengthPointCount)];
+        for (int z = 0; z < LengthPointCount; z++)
+        {
+            for (int x = 0; x < HeightPointCount; x++)
+            {
+                uvs[uvIndex] = new Vector2((float)z / (float)(LengthPointCount -1), (float)x / (float)(HeightPointCount - 1));
+                uvIndex++;
+            }
+        }
     }
 
     void UpdateMesh()
     {
-        msh.Clear();
+        //msh.Clear();
 
         msh.vertices = vertices;
-        msh.triangles = triangles;
+        //msh.triangles = triangles;
+        //msh.uv = uvs;
 
-        msh.RecalculateNormals();
+        //msh.RecalculateNormals();
+        //msh.RecalculateTangents();
+        //msh.RecalculateBounds();
     }
 
     // Update is called once per frame
     void Update()
     {
         UpdateMesh();
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector3 pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            pz.z = 0;
-            GameObject newVentilo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            newVentilo.transform.position = pz;
-            newVentilo.tag = "Ventilateur";
-            ventilateurs = GameObject.FindGameObjectsWithTag("Ventilateur");
+
+        switch(currentInteractionMode)
+            {
+            case InteractionMode.Pin:
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Vector3 pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    float distanceToVertice;
+                    int closesIndex = GetVerticeIndexNear(pz, out distanceToVertice);
+
+                    if (distanceToVertice < (VerletHeight / HeightPointCount) * (VerletHeight / HeightPointCount))
+                    {
+                        pinnedVerticesIndex.Add(closesIndex);
+                    }
+
+                } else if(Input.GetMouseButtonDown(1))
+                {
+                    Vector3 pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    float distanceToVertice;
+                    int closesIndex = GetVerticeIndexNear(pz, out distanceToVertice);
+
+                    if (distanceToVertice < (VerletHeight / HeightPointCount) * (VerletHeight / HeightPointCount))
+                    {
+                        pinnedVerticesIndex.Remove(closesIndex);
+                    }
+                }
+                break;
+
+            case InteractionMode.Wind:
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Vector3 pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    pz.z = 0;
+                    GameObject newVentilo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    newVentilo.transform.position = pz;
+                    newVentilo.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                    newVentilo.tag = "Ventilateur";
+                    ventilateurs = GameObject.FindGameObjectsWithTag("Ventilateur");
+
+                }
+                else if (Input.GetMouseButtonDown(1))
+                {
+                    if (ventilateurs.Length > 0)
+                    {
+                        Destroy(ventilateurs[ventilateurs.Length - 1]);
+                        ventilateurs = GameObject.FindGameObjectsWithTag("Ventilateur");
+                    }
+                }
+                break;
+            case InteractionMode.Needle:
+                if (Input.GetMouseButton(0))
+                {
+
+                    Vector3 pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    if (StartNeedleIndex < 0)
+                    {
+                        //needle init
+                        float distanceToVertice;
+                        int closesIndex = GetVerticeIndexNear(pz, out distanceToVertice);
+
+                        if (distanceToVertice < (VerletHeight / HeightPointCount) * (VerletHeight / HeightPointCount))
+                        {
+                            Debug.Log("Click INIT");
+                            StartNeedleIndex = closesIndex;
+                            return;
+                        }
+                    }
+
+                    if (Input.GetMouseButtonDown(1))
+                    {
+
+                        float distanceToVertice;
+                        int closesIndex = GetVerticeIndexNear(pz, out distanceToVertice);
+
+                        if (distanceToVertice < (VerletHeight / HeightPointCount) * (VerletHeight / HeightPointCount))
+                        {
+                            if (StartNeedleIndex != closesIndex)
+                            {
+                                Debug.Log("RightClick create link");
+                                verletLink.Add(new VerletLink(StartNeedleIndex, closesIndex, (vertices[StartNeedleIndex] - vertices[closesIndex]).magnitude));
+                                linkCreatedPosition = pz;
+                            }
+                        }
+                    }
+
+                    if (Input.GetMouseButton(1))
+                    {
+                        Debug.Log("Click & rightClick " + verletLink[verletLink.Count - 1].linkSize + " - " + (linkCreatedPosition - pz).magnitude);
+                        float linkSize = verletLink[verletLink.Count - 1].linkSize - (linkCreatedPosition - pz).magnitude;
+                        if (linkSize < 0)
+                        {
+                            linkSize = 0;
+                        }
+                        verletLink[verletLink.Count - 1].linkSize = linkSize;
+                        linkCreatedPosition = pz;
+                    }
+                }
+                else
+                {
+                    StartNeedleIndex = -1;
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        verletLink.RemoveAt(verletLink.Count - 1);
+                    }
+                }
+                break;
+
+
+            default:
+                break;
         }
     }
+
+
+    public int GetVerticeIndexNear(Vector3 position,out float minDistance, bool is2D = true)
+    {
+        if(is2D)
+        {
+            position.z = 0;
+        }
+        minDistance = float.MaxValue;
+        int minDistanceIndex = -1;
+        for (int index = 0; index < vertices.Length; index++)
+        {
+            Vector3 indexPos = vertices[index];
+            if (is2D)
+            {
+                indexPos.z = 0;
+            }
+            float distance = (indexPos - position).sqrMagnitude;
+            if(distance < minDistance)
+            {
+                minDistanceIndex = index;
+                minDistance = distance;
+            }
+        }
+
+        return minDistanceIndex;
+    }
+
 
     private void FixedUpdate()
     {
@@ -168,16 +352,19 @@ public class VerletManager : MonoBehaviour
                 vertices[index] += forceGravity * Time.fixedDeltaTime;
 
 
-                for(int v = 0; v < ventilateurs.Length; v++)
+            for (int v = 0; v < ventilateurs.Length; v++)
+            {
+                if (ventilateurs[v] != null)
                 {
                     float dist = (vertices[index] - ventilateurs[v].transform.position).magnitude;
-                    if(dist < ventilateurDistanceMax)
+                    if (dist < ventilateurDistanceMax)
                     {
                         float factor = (ventilateurDistanceMax - dist) / ventilateurDistanceMax;
                         Vector3 dir = (vertices[index] - ventilateurs[v].transform.position).normalized;
-                        vertices[index] += factor * ventilateurStrenght * dir * Time.fixedDeltaTime * Mathf.Sin(6.0f*3.141592654f * Time.fixedDeltaTime * WindSinusPeriod);
+                        vertices[index] += factor * ventilateurStrenght * dir * Time.fixedDeltaTime * Mathf.Sin(6.0f * 3.141592654f * Time.fixedDeltaTime * WindSinusPeriod);
                     }
                 }
+            }
         }
 
         //CONSTRAINTS
@@ -266,7 +453,7 @@ public class VerletManager : MonoBehaviour
         }
     }
 
-    public struct VerletLink
+    public class VerletLink
     {
         public int pointIndex;
         public int point2Index;
