@@ -59,6 +59,7 @@ Transform:
   - {fileID: 7609270522176435445}
   - {fileID: 8875320806836016328}
   - {fileID: 3664524401245075979}
+  - {fileID: 6362688687239156816}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -215,6 +216,82 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &6752379249995923186
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6362688687239156816}
+  - component: {fileID: 2063405549304271650}
+  - component: {fileID: 1717586971953210686}
+  m_Layer: 0
+  m_Name: Terrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!4 &6362688687239156816
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6752379249995923186}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -25, y: 26.2, z: -25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7175296692755645017}
+  m_RootOrder: 29
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!218 &2063405549304271650
+Terrain:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6752379249995923186}
+  m_Enabled: 1
+  serializedVersion: 6
+  m_TerrainData: {fileID: 15600000, guid: ad05ab7014b968d4aa210f1800ebf3f0, type: 2}
+  m_TreeDistance: 5000
+  m_TreeBillboardDistance: 50
+  m_TreeCrossFadeLength: 5
+  m_TreeMaximumFullLODCount: 50
+  m_DetailObjectDistance: 80
+  m_DetailObjectDensity: 1
+  m_HeightmapPixelError: 5
+  m_SplatMapDistance: 1000
+  m_HeightmapMaximumLOD: 0
+  m_ShadowCastingMode: 2
+  m_DrawHeightmap: 1
+  m_DrawInstanced: 0
+  m_DrawTreesAndFoliage: 1
+  m_ReflectionProbeUsage: 1
+  m_MaterialTemplate: {fileID: 10652, guid: 0000000000000000f000000000000000, type: 0}
+  m_BakeLightProbesForTrees: 1
+  m_PreserveTreePrototypeLayers: 0
+  m_DeringLightProbesForTrees: 1
+  m_ScaleInLightmap: 0.0256
+  m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
+  m_GroupingID: 0
+  m_RenderingLayerMask: 1
+  m_AllowAutoConnect: 1
+--- !u!154 &1717586971953210686
+TerrainCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6752379249995923186}
+  m_Material: {fileID: 0}
+  m_Enabled: 1
+  m_TerrainData: {fileID: 15600000, guid: ad05ab7014b968d4aa210f1800ebf3f0, type: 2}
+  m_EnableTreeColliders: 1
 --- !u!1001 &159289560883062364
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -225,6 +302,10 @@ PrefabInstance:
     - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_01_Snow (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 438482, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_LocalPosition.x
@@ -289,6 +370,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_01_Snow (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 438482, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_LocalPosition.x
       value: -16.545418
@@ -351,6 +436,10 @@ PrefabInstance:
     - target: {fileID: 186874, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_03_Snow (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186874, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 453640, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
       propertyPath: m_LocalPosition.x
@@ -415,6 +504,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_03_Snow (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 186874, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 453640, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.521547
@@ -477,6 +570,10 @@ PrefabInstance:
     - target: {fileID: 142174, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_02_Snow
+      objectReference: {fileID: 0}
+    - target: {fileID: 142174, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 438884, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
       propertyPath: m_LocalPosition.x
@@ -541,6 +638,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_01_Snow (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 438482, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.6
@@ -603,6 +704,10 @@ PrefabInstance:
     - target: {fileID: 186874, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_03_Snow (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186874, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 453640, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
       propertyPath: m_LocalPosition.x
@@ -667,6 +772,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_03_Snow (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 186874, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 453640, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.9813347
@@ -729,6 +838,10 @@ PrefabInstance:
     - target: {fileID: 186874, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_03_Snow (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186874, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 453640, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
       propertyPath: m_LocalPosition.x
@@ -793,6 +906,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_01_Snow (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 438482, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.5052047
@@ -855,6 +972,10 @@ PrefabInstance:
     - target: {fileID: 186874, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_03_Snow (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 186874, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 453640, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
       propertyPath: m_LocalPosition.x
@@ -919,6 +1040,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_02_Snow (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 142174, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 438884, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10.964684
@@ -981,6 +1106,10 @@ PrefabInstance:
     - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_01_Snow (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 438482, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1045,6 +1174,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_02_Snow (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 142174, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 438884, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.9353166
@@ -1107,6 +1240,10 @@ PrefabInstance:
     - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_01_Snow (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 438482, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1171,6 +1308,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_03_Snow
       objectReference: {fileID: 0}
+    - target: {fileID: 186874, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 453640, guid: e6f6550324ff4424fa8b632d6e98c287, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12.845852
@@ -1233,6 +1374,10 @@ PrefabInstance:
     - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_01_Snow (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 438482, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1297,6 +1442,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_01_Snow (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 438482, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.7597876
@@ -1359,6 +1508,10 @@ PrefabInstance:
     - target: {fileID: 142174, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_02_Snow (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 142174, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 438884, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1423,6 +1576,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_01_Snow (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 438482, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.854583
@@ -1485,6 +1642,10 @@ PrefabInstance:
     - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_01_Snow (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 438482, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1549,6 +1710,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_02_Snow (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 142174, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 438884, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
       propertyPath: m_LocalPosition.x
       value: -19.975529
@@ -1611,6 +1776,10 @@ PrefabInstance:
     - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_01_Snow (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 438482, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1675,6 +1844,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_02_Snow (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 142174, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 438884, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.6
@@ -1737,6 +1910,10 @@ PrefabInstance:
     - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_01_Snow (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 438482, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1801,6 +1978,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_02_Snow (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 142174, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 438884, guid: 9294f12d436cf5a4281abae31de41b76, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.5
@@ -1864,6 +2045,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_01_Snow
       objectReference: {fileID: 0}
+    - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 438482, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_LocalPosition.x
       value: 15.172813
@@ -1926,6 +2111,10 @@ PrefabInstance:
     - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_Name
       value: SM_Env_Tree_Pine_Large_01_Snow (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 131676, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 438482, guid: 76517d61edef32a4d8548bb025f17d99, type: 3}
       propertyPath: m_LocalPosition.x
